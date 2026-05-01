@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aulas Particulares</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Aulas Particulares</h1>
+    <p>Matemática · Química · Física · Biologia</p>
+  </header>
+
+  <section id="precos">
+    <h2>Preços por hora</h2>
+    <div class="precos-grid">
+      <div class="preco-card">
+        <h3>Aula avulsa</h3>
+        <p class="valor">60€/h</p>
+        <p>Sem compromisso</p>
+      </div>
+      <div class="preco-card destaque">
+        <h3>2× por semana</h3>
+        <p class="valor">50€/h</p>
+        <p>Pagamento combinado</p>
+      </div>
+      <div class="preco-card">
+        <h3>3× por semana</h3>
+        <p class="valor">45€/h</p>
+        <p>Pagamento combinado</p>
+      </div>
+    </div>
+    <p class="nota">⚠️ O plano e método de pagamento são acordados diretamente comigo após confirmação.</p>
+  </section>
+
+  <section id="reserva">
+    <h2>Reservar uma aula</h2>
+
+    <div id="formContainer">
+      <form id="formReserva">
+
+        <label for="nome">O teu nome</label>
+        <input type="text" id="nome" placeholder="Ex: João Silva" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="joao@email.com" required>
+
+        <label for="telefone">Telemóvel (opcional)</label>
+        <input type="tel" id="telefone" placeholder="+351 912 345 678">
+
+        <label for="materia">Matéria</label>
+        <select id="materia" required>
+          <option value="">Escolhe uma matéria</option>
+          <option value="Matemática">Matemática</option>
+          <option value="Química">Química</option>
+          <option value="Física">Física</option>
+          <option value="Biologia">Biologia</option>
+        </select>
+
+        <label for="duracao">Duração da aula</label>
+        <select id="duracao" required>
+          <option value="">Escolhe a duração</option>
+          <option value="1h">1 hora</option>
+          <option value="1h30">1 hora e 30 minutos</option>
+          <option value="2h">2 horas</option>
+        </select>
+
+        <label for="diaSemana">Dia da semana</label>
+        <select id="diaSemana" required>
+          <option value="">Escolhe o dia</option>
+          <option value="segunda">Segunda-feira</option>
+          <option value="terca">Terça-feira</option>
+          <option value="quarta">Quarta-feira</option>
+          <option value="quinta">Quinta-feira</option>
+          <option value="sexta">Sexta-feira</option>
+          <option value="sabado">Sábado</option>
+          <option value="domingo">Domingo</option>
+        </select>
+
+        <label for="horario">Horário disponível</label>
+        <select id="horario" required>
+          <option value="">Escolhe primeiro o dia</option>
+        </select>
+
+        <p id="loadingHorarios" style="display:none; color:#888; font-size:14px;">A carregar horários...</p>
+
+        <label for="observacoes">Observações (opcional)</label>
+        <textarea id="observacoes" placeholder="Ex: tenho exame daqui a 2 semanas, preciso de ajuda com derivadas..."></textarea>
+
+        <button type="submit" id="btnSubmit">Enviar pedido de reserva</button>
+      </form>
+    </div>
+
+    <div id="mensagemSucesso" style="display:none">
+      <h3>✅ Pedido enviado!</h3>
+      <p>Receberás uma confirmação por email assim que eu aprovar a reserva. Obrigado!</p>
+    </div>
+
+    <div id="mensagemErro" style="display:none">
+      <h3>❌ Erro ao enviar</h3>
+      <p id="textoErro"></p>
+    </div>
+  </section>
+
+  <section id="horarios">
+    <h2>Horários disponíveis</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Dia</th>
+          <th>Horário</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Segunda-feira</td><td>16h00 – 20h30</td></tr>
+        <tr><td>Terça-feira</td><td>16h00 – 20h30</td></tr>
+        <tr><td>Quarta-feira</td><td>15h00 – 20h30</td></tr>
+        <tr><td>Quinta-feira</td><td>16h00 – 20h30</td></tr>
+        <tr><td>Sexta-feira</td><td>16h00 – 20h30</td></tr>
+        <tr><td>Sábado</td><td>15h00 – 20h30</td></tr>
+        <tr><td>Domingo</td><td>15h00 – 20h30</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>Para dúvidas, entra em contacto diretamente.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

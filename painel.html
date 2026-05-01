@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Reservas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #f0f0f0; }
+    .painel-header {
+      background: #1a1a2e;
+      color: white;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .painel-header h1 { font-size: 22px; }
+    #conteudo { max-width: 800px; margin: 30px auto; padding: 0 16px; }
+    .filtros { display: flex; gap: 10px; margin-bottom: 24px; }
+    .filtros button {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1.5px solid #ddd;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .filtros button.ativo {
+      background: #1a1a2e;
+      color: white;
+      border-color: #1a1a2e;
+    }
+    #semReservas {
+      text-align: center;
+      color: #888;
+      padding: 40px;
+      background: white;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="painel-header">
+    <h1>📋 Painel de Reservas</h1>
+    <span id="contadorPendentes" style="background:#f0a500; padding:4px 12px; border-radius:20px; font-size:14px;"></span>
+  </div>
+
+  <div id="conteudo">
+    <div class="filtros">
+      <button class="ativo" onclick="filtrar('todas')">Todas</button>
+      <button onclick="filtrar('pendente')">Pendentes</button>
+      <button onclick="filtrar('confirmada')">Confirmadas</button>
+    </div>
+    <div id="listaReservas">
+      <p style="color:#888;">A carregar reservas...</p>
+    </div>
+    <div id="semReservas" style="display:none">
+      <p>Nenhuma reserva encontrada.</p>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ SUBSTITUI ESTES DOIS VALORES PELAS TUAS CHAVES DO SUPABASE
+    const SUPABASE_URL = "https://thnpicjrzqiivnifmhjp.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRobnBpY2pyenFpaXZuaWZtaGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NDU5MzYsImV4cCI6MjA5MzIyMTkzNn0.-vIc6-R6oBZMyJT6SE5hLP5-nZQPNlaft8w6tyomZfE";
+
+    const nomesDias = {
+      segunda: "Segunda-feira", terca: "Terça-feira", quarta: "Quarta-feira",
+      quinta: "Quinta-feira", sexta: "Sexta-feira", sabado: "Sábado", domingo: "Domingo"
+    };
+
+    let todasReservas = [];
+    let filtroAtual = "todas";
+
+    async function carregarReservas() {
+      const resposta = await fetch(
+        `${SUPABASE_URL}/rest/v1/reservas?order=criado_em.desc`,
+        {
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + SUPABASE_KEY
+          }
+        }
+      );
+      todasReservas = await resposta.json();
+      renderizar();
+    }
+
+    function renderizar() {
+      const lista = document.getElementById("listaReservas");
+      const semReservas = document.getElementById("semReservas");
+
+      let reservasFiltradas = todasReservas;
+      if (filtroAtual !== "todas") {
+        reservasFiltradas = todasReservas.filter(r => r.estado === filtroAtual);
+      }
+
+      const pendentes = todasReservas.filter(r => r.estado === "pendente").length;
+      document.getElementById("contadorPendentes").textContent =
+        pendentes > 0 ? `${pendentes} pendente${pendentes > 1 ? "s" : ""}` : "";
+
+      if (reservasFiltradas.length === 0) {
+        lista.innerHTML = "";
+        semReservas.style.display = "block";
+        return;
+      }
+
+      semReservas.style.display = "none";
+      lista.innerHTML = reservasFiltradas.map(r => `
+        <div class="reserva-card ${r.estado}" id="card-${r.id}">
+          <span class="badge ${r.estado}">${r.estado === "pendente" ? "⏳ Pendente" : "✅ Confirmada"}</span>
+          <h3>${r.nome}</h3>
+          <p>📚 ${r.materia} · ⏱ ${r.duracao}</p>
+          <p>📅 ${nomesDias[r.dia]} às ${r.horario}</p>
+          <p>📧 ${r.email}${r.telefone ? " · 📞 " + r.telefone : ""}</p>
+          ${r.observacoes ? `<p style="margin-top:8px; font-style:italic; color:#666;">💬 "${r.observacoes}"</p>` : ""}
+          <p style="font-size:12px; color:#aaa; margin-top:8px;">Enviado em ${new Date(r.criado_em).toLocaleString("pt-PT")}</p>
+          ${r.estado === "pendente" ? `
+            <button class="btn-confirmar" onclick="mudarEstado('${r.id}', 'confirmada')">✅ Confirmar</button>
+            <button class="btn-rejeitar" onclick="mudarEstado('${r.id}', 'rejeitada')">❌ Rejeitar</button>
+          ` : ""}
+        </div>
+      `).join("");
+    }
+
+    async function mudarEstado(id, novoEstado) {
+      await fetch(`${SUPABASE_URL}/rest/v1/reservas?id=eq.${id}`, {
+        method: "PATCH",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ estado: novoEstado })
+      });
+      await carregarReservas();
+    }
+
+    function filtrar(estado) {
+      filtroAtual = estado;
+      document.querySelectorAll(".filtros button").forEach(btn => btn.classList.remove("ativo"));
+      event.target.classList.add("ativo");
+      renderizar();
+    }
+
+    carregarReservas();
+  </script>
+</body>
+</html>

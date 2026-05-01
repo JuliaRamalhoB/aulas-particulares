@@ -1,0 +1,276 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+  line-height: 1.6;
+}
+
+section {
+  max-width: 700px;
+  margin: 40px auto;
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}
+
+header {
+  background: #1a1a2e;
+  color: white;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+header h1 {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+/* PREÇOS */
+.precos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.preco-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.preco-card.destaque {
+  border-color: #1a1a2e;
+  background: #1a1a2e;
+  color: white;
+}
+
+.preco-card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.preco-card .valor {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4a90d9;
+  margin-bottom: 6px;
+}
+
+.preco-card.destaque .valor {
+  color: #7fc8f8;
+}
+
+.nota {
+  font-size: 13px;
+  color: #666;
+  background: #fff8e1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border-left: 4px solid #f0a500;
+}
+
+/* FORMULÁRIO */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #444;
+}
+
+input, select, textarea {
+  padding: 10px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #1a1a2e;
+}
+
+textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+button[type="submit"] {
+  background: #1a1a2e;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+  background: #2e2e5e;
+}
+
+button[type="submit"]:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+#mensagemSucesso {
+  background: #e8f5e9;
+  border: 2px solid #4caf50;
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+}
+
+#mensagemSucesso h3 {
+  color: #2e7d32;
+  margin-bottom: 8px;
+}
+
+#mensagemErro {
+  background: #ffebee;
+  border: 2px solid #e53935;
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+#mensagemErro h3 {
+  color: #c62828;
+  margin-bottom: 8px;
+}
+
+/* TABELA */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background: #1a1a2e;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* PAINEL DE ADMINISTRAÇÃO */
+.reserva-card {
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.reserva-card.pendente {
+  border-left: 5px solid #f0a500;
+}
+
+.reserva-card.confirmada {
+  border-left: 5px solid #4caf50;
+  opacity: 0.7;
+}
+
+.reserva-card h3 {
+  margin-bottom: 8px;
+  color: #1a1a2e;
+}
+
+.reserva-card p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.badge.pendente {
+  background: #fff8e1;
+  color: #b8860b;
+}
+
+.badge.confirmada {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.btn-confirmar {
+  background: #1a1a2e;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-confirmar:hover {
+  background: #2e2e5e;
+}
+
+.btn-rejeitar {
+  background: white;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: 8px;
+}
+
+.btn-rejeitar:hover {
+  background: #ffebee;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #888;
+  font-size: 14px;
+}
