@@ -274,3 +274,183 @@ footer {
   color: #888;
   font-size: 14px;
 }
+
+
+/* === CALENDÁRIO === */
+#calendario {
+  margin-bottom: 24px;
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cal-header button {
+  background: #1a1a2e;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cal-header button:hover { background: #2e2e5e; }
+
+#mesAno {
+  font-weight: 700;
+  font-size: 17px;
+  color: #1a1a2e;
+}
+
+.cal-dias-semana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.cal-dias-semana span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  padding: 4px 0;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.cal-dia {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.cal-dia.vazio { background: transparent; }
+.cal-dia.passado { color: #ccc; }
+.cal-dia.indisponivel { color: #ddd; background: #fafafa; }
+
+.cal-dia.disponivel {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.cal-dia.parcial {
+  background: #fff8e1;
+  color: #b8860b;
+}
+
+.cal-dia.lotado {
+  background: #ffebee;
+  color: #c62828;
+  text-decoration: line-through;
+}
+
+.cal-dia.clicavel {
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.cal-dia.clicavel:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.cal-dia.selecionado {
+  background: #1a1a2e !important;
+  color: white !important;
+  font-weight: 700;
+}
+
+.cal-legenda {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.cal-legenda span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cal-legenda span::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.leg-disponivel::before { background: #e8f5e9; border: 1px solid #4caf50; }
+.leg-parcial::before { background: #fff8e1; border: 1px solid #f0a500; }
+.leg-lotado::before { background: #ffebee; border: 1px solid #e53935; }
+.leg-indisponivel::before { background: #fafafa; border: 1px solid #ddd; }
+
+/* HORÁRIOS EM GRADE */
+.grade-horarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.btn-horario {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.15s;
+}
+
+.btn-horario.livre {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-color: #4caf50;
+}
+
+.btn-horario.livre:hover {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-horario.ocupado {
+  background: #f5f5f5;
+  color: #bbb;
+  border-color: #eee;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* BOTÕES DO FORMULÁRIO */
+.form-botoes {
+  display: flex;
+  gap: 10px;
+}
+
+#btnVoltar {
+  background: white;
+  color: #1a1a2e;
+  border: 1.5px solid #1a1a2e;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#btnVoltar:hover { background: #f0f0f0; }
