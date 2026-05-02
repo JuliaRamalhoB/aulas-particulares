@@ -18,17 +18,17 @@
     <div class="precos-grid">
       <div class="preco-card">
         <h3>Aula avulsa</h3>
-        <p class="valor">60€/h</p>
+        <p class="valor">R$60/h</p>
         <p>Sem compromisso</p>
       </div>
       <div class="preco-card destaque">
         <h3>2× por semana</h3>
-        <p class="valor">50€/h</p>
+        <p class="valor">R$50/h</p>
         <p>Pagamento combinado</p>
       </div>
       <div class="preco-card">
         <h3>3× por semana</h3>
-        <p class="valor">45€/h</p>
+        <p class="valor">R$45/h</p>
         <p>Pagamento combinado</p>
       </div>
     </div>
@@ -37,9 +37,40 @@
 
   <section id="reserva">
     <h2>Reservar uma aula</h2>
+    <p class="nota" style="margin-bottom:20px;">📅 Seleciona um dia disponível no calendário abaixo</p>
 
-    <div id="formContainer">
+    <!-- CALENDÁRIO -->
+    <div id="calendario">
+      <div class="cal-header">
+        <button id="btnMesAnterior">&#8592;</button>
+        <span id="mesAno"></span>
+        <button id="btnProximoMes">&#8594;</button>
+      </div>
+      <div class="cal-dias-semana">
+        <span>Dom</span><span>Seg</span><span>Ter</span>
+        <span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+      </div>
+      <div id="calDias" class="cal-grid"></div>
+      <div class="cal-legenda">
+        <span class="leg-disponivel">Disponível</span>
+        <span class="leg-parcial">Parcialmente ocupado</span>
+        <span class="leg-lotado">Lotado</span>
+        <span class="leg-indisponivel">Indisponível</span>
+      </div>
+    </div>
+
+    <!-- HORÁRIOS DO DIA SELECIONADO -->
+    <div id="secaoHorarios" style="display:none">
+      <h3 id="tituloHorarios"></h3>
+      <div id="gradeHorarios" class="grade-horarios"></div>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div id="formContainer" style="display:none">
+      <h3 id="tituloFormulario"></h3>
       <form id="formReserva">
+        <input type="hidden" id="dataEscolhida">
+        <input type="hidden" id="horarioEscolhido">
 
         <label for="nome">O teu nome</label>
         <input type="text" id="nome" placeholder="Ex: João Silva" required>
@@ -47,8 +78,8 @@
         <label for="email">Email</label>
         <input type="email" id="email" placeholder="joao@email.com" required>
 
-        <label for="telefone">Telemóvel (opcional)</label>
-        <input type="tel" id="telefone" placeholder="+351 912 345 678">
+        <label for="telefone">Celular (opcional)</label>
+        <input type="tel" id="telefone" placeholder="+55 11 91234-5678">
 
         <label for="materia">Matéria</label>
         <select id="materia" required>
@@ -67,35 +98,19 @@
           <option value="2h">2 horas</option>
         </select>
 
-        <label for="diaSemana">Dia da semana</label>
-        <select id="diaSemana" required>
-          <option value="">Escolhe o dia</option>
-          <option value="segunda">Segunda-feira</option>
-          <option value="terca">Terça-feira</option>
-          <option value="quarta">Quarta-feira</option>
-          <option value="quinta">Quinta-feira</option>
-          <option value="sexta">Sexta-feira</option>
-          <option value="sabado">Sábado</option>
-          <option value="domingo">Domingo</option>
-        </select>
-
-        <label for="horario">Horário disponível</label>
-        <select id="horario" required>
-          <option value="">Escolhe primeiro o dia</option>
-        </select>
-
-        <p id="loadingHorarios" style="display:none; color:#888; font-size:14px;">A carregar horários...</p>
-
         <label for="observacoes">Observações (opcional)</label>
         <textarea id="observacoes" placeholder="Ex: tenho exame daqui a 2 semanas, preciso de ajuda com derivadas..."></textarea>
 
-        <button type="submit" id="btnSubmit">Enviar pedido de reserva</button>
+        <div class="form-botoes">
+          <button type="button" id="btnVoltar">← Voltar</button>
+          <button type="submit" id="btnSubmit">Enviar pedido de reserva</button>
+        </div>
       </form>
     </div>
 
     <div id="mensagemSucesso" style="display:none">
       <h3>✅ Pedido enviado!</h3>
-      <p>Receberás uma confirmação por email assim que eu aprovar a reserva. Obrigado!</p>
+      <p>Receberás uma confirmação assim que eu aprovar a reserva. Obrigado!</p>
     </div>
 
     <div id="mensagemErro" style="display:none">
@@ -106,12 +121,10 @@
 
   <section id="horarios">
     <h2>Horários disponíveis</h2>
+    <p style="font-size:13px; color:#888; margin-bottom:16px;">Horários no fuso de Lisboa (Portugal) — Brasil está 4h atrás</p>
     <table>
       <thead>
-        <tr>
-          <th>Dia</th>
-          <th>Horário</th>
-        </tr>
+        <tr><th>Dia</th><th>Horário</th></tr>
       </thead>
       <tbody>
         <tr><td>Segunda-feira</td><td>16h00 – 20h30</td></tr>
