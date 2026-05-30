@@ -4,13 +4,13 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const DIAS_DISPONIVEIS = [0, 1, 2, 3, 4, 5, 6];
 
 const horariosPorDia = {
-  0: ["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"], // Dom
-  1: ["16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"], // Seg
-  2: ["16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"], // Ter
-  3: ["15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"], // Qua
-  4: ["16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"], // Qui
-  5: ["16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"], // Sex
-  6: ["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"]  // Sáb
+  0: ["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"],
+  1: ["16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"],
+  2: ["16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"],
+  3: ["15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"],
+  4: ["16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"],
+  5: ["16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"],
+  6: ["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"]
 };
 
 const nomesMeses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
@@ -21,7 +21,6 @@ let anoAtual = new Date().getFullYear();
 let reservasDoMes = {};
 let dataSelecionada = null;
 
-// Função segura para criar data sem problema de fuso
 function criarData(dataStr) {
   const [ano, mes, dia] = dataStr.split("-").map(Number);
   return new Date(ano, mes - 1, dia);
@@ -29,7 +28,9 @@ function criarData(dataStr) {
 
 async function carregarReservasDoMes(ano, mes) {
   const inicio = `${ano}-${String(mes+1).padStart(2,'0')}-01`;
-  const fim = `${ano}-${String(mes+1).padStart(2,'0')}-31`;
+  // CORRIGIDO: pega o último dia real do mês em vez de assumir sempre 31
+  const ultimoDia = new Date(ano, mes + 1, 0).getDate();
+  const fim = `${ano}-${String(mes+1).padStart(2,'0')}-${String(ultimoDia).padStart(2,'0')}`;
 
   const resposta = await fetch(
     `${SUPABASE_URL}/rest/v1/reservas?data_aula=gte.${inicio}&data_aula=lte.${fim}&estado=eq.confirmada&select=data_aula,horario`,
@@ -84,11 +85,12 @@ async function renderizarCalendario() {
       } else if (ocupados > 0) {
         div.classList.add("parcial");
         div.classList.add("clicavel");
-        div.addEventListener("click", () => selecionarDia(dataStr, diaSemana, d));
+        // CORRIGIDO: passa mesAtual e anoAtual no momento do clique
+        div.addEventListener("click", () => selecionarDia(dataStr, diaSemana, d, mesAtual, anoAtual));
       } else {
         div.classList.add("disponivel");
         div.classList.add("clicavel");
-        div.addEventListener("click", () => selecionarDia(dataStr, diaSemana, d));
+        div.addEventListener("click", () => selecionarDia(dataStr, diaSemana, d, mesAtual, anoAtual));
       }
 
       if (dataStr === dataSelecionada) div.classList.add("selecionado");
@@ -98,11 +100,12 @@ async function renderizarCalendario() {
   }
 }
 
-async function selecionarDia(dataStr, diaSemana, dia) {
+// CORRIGIDO: recebe mes e ano como parâmetros em vez de usar variáveis globais
+async function selecionarDia(dataStr, diaSemana, dia, mes, ano) {
   dataSelecionada = dataStr;
   document.getElementById("formContainer").style.display = "none";
   document.getElementById("secaoHorarios").style.display = "block";
-  document.getElementById("tituloHorarios").textContent = `${nomesDias[diaSemana]}, ${dia} de ${nomesMeses[mesAtual]}`;
+  document.getElementById("tituloHorarios").textContent = `${nomesDias[diaSemana]}, ${dia} de ${nomesMeses[mes]}`;
 
   const grade = document.getElementById("gradeHorarios");
   grade.innerHTML = "<p style='color:#888'>A carregar horários...</p>";
@@ -126,7 +129,6 @@ async function selecionarDia(dataStr, diaSemana, dia) {
     }
   });
 
-  // Bloqueia horários onde nenhuma duração cabe sem colidir
   const horariosQueNaoPodeComecar = new Set();
   todosHorarios.forEach((hora, idx) => {
     let algumaCabe = false;
@@ -152,7 +154,8 @@ async function selecionarDia(dataStr, diaSemana, dia) {
       btn.disabled = true;
     } else {
       btn.classList.add("livre");
-      btn.addEventListener("click", () => selecionarHorario(hora, diaSemana, dia));
+      // CORRIGIDO: passa mes junto
+      btn.addEventListener("click", () => selecionarHorario(hora, diaSemana, dia, mes));
     }
     grade.appendChild(btn);
   });
@@ -160,11 +163,12 @@ async function selecionarDia(dataStr, diaSemana, dia) {
   renderizarCalendario();
 }
 
-function selecionarHorario(hora, diaSemana, dia) {
+// CORRIGIDO: recebe mes como parâmetro
+function selecionarHorario(hora, diaSemana, dia, mes) {
   document.getElementById("horarioEscolhido").value = hora;
   document.getElementById("dataEscolhida").value = dataSelecionada;
   document.getElementById("tituloFormulario").textContent =
-    `📋 Reservar: ${nomesDias[diaSemana]}, ${dia} de ${nomesMeses[mesAtual]} às ${hora}`;
+    `📋 Reservar: ${nomesDias[diaSemana]}, ${dia} de ${nomesMeses[mes]} às ${hora}`;
   document.getElementById("secaoHorarios").style.display = "none";
   document.getElementById("formContainer").style.display = "block";
 }
